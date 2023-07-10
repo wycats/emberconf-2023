@@ -1,0 +1,101 @@
+:root {
+  // default theme color
+  // can be overrided by uses `themeConfig` option
+  --slidev-theme-primary: #3e5166;
+  --slidev-theme-secondary: #34d399;
+}
+
+/* general css here */
+
+html:not(.dark) #slide-content {
+  /* light mode css here */
+  @apply bg-white text-primary;
+}
+
+.dark #slide-content {
+  /* dark mode css here */
+  @apply bg-primary-600 text-light-300;
+
+  h1 {
+    @apply text-secondary;
+  }
+
+  a {
+    @apply text-secondary-300 hover:text-secondary-500;
+  }
+}
+
+.slidev-layout {
+  @apply relative h-full;
+
+  h1 {
+    @apply mb-8 mt-0;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-display;
+  }
+
+  a {
+    @apply text-secondary-400 hover:text-secondary-500 dark:text-gray-50 dark:hover:text-secondary-500 transition ease-in-out duration-300;
+  }
+
+  img {
+    border-radius: 5px;
+  }
+
+  ul {
+    @apply list-disc;
+  }
+
+  .prose > ul {
+    li {
+      margin-left: 0;
+    }
+  }
+
+  ul.emoji-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      padding-left: 1rem;
+      text-indent: -0.7rem;
+    }
+
+    li::before {
+      content: '🐧 ';
+    }
+  }
+
+  pre {
+    @apply font-bold;
+    font-size: 0.65rem !important;
+    scrollbar-gutter: stable;
+    overflow: auto;
+  }
+
+  code {
+    @apply text-secondary-300;
+
+    font-size: 0.65rem !important;
+  }
+
+  .slidev-code-wrapper > pre {
+    width: max-content;
+    min-width: 400px;
+    max-width: 100%;
+  }
+
+  iframe label.btn {
+    display: none;
+  }
+
+  .dishonored {
+    opacity: 0.5;
+  }
+}

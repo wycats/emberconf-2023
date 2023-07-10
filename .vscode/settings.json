@@ -1,0 +1,12 @@
+{
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/bower_components": true,
+    "**/*.code-search": true,
+    "pnpm-lock.yaml": true
+  },
+  "css.lint.unknownAtRules": "ignore",
+  "[markdown]": {
+    "editor.defaultFormatter": "vscode.markdown-language-features"
+  }
+}

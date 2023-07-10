@@ -1,0 +1,17 @@
+@font-face {
+  font-family: 'Gilroy ExtraBold';
+  font-style: normal;
+  font-weight: bold;
+  font-display: swap;
+  src: local('Gilroy ExtraBold'), url('/fonts/Gilroy-ExtraBold.otf') format('opentype'),
+    url('/fonts/Gilroy-ExtraBold.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'mononoki Regular';
+  font-style: normal;
+  font-weight: bold;
+  font-display: swap;
+  src: local('mononoki Regular'), url('/fonts/mononoki-Regular.otf') format('opentype'),
+    url('/fonts/mononoki-Regular.ttf') format('truetype');
+}
