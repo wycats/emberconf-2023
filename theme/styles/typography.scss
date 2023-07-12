@@ -1,0 +1,40 @@
+:root {
+  font-size: 16px;
+  --s-ratio: 1.15;
+  --s-ratio2: calc(var(--s-ratio) * var(--s-ratio));
+  --s-base: 1rem;
+  --s-up1: calc(var(--s-base) * var(--s-ratio));
+  --s-up2: calc(var(--s-up1) * var(--s-ratio));
+  --s-up3: calc(var(--s-up2) * var(--s-ratio));
+  --s-up4: calc(var(--s-up3) * var(--s-ratio));
+  --s-up5: calc(var(--s-up4) * var(--s-ratio));
+  --s-up6: calc(var(--s-up5) * var(--s-ratio));
+  --s-up7: calc(var(--s-up6) * var(--s-ratio));
+  --s-up8: calc(var(--s-up7) * var(--s-ratio));
+  --s-up9: calc(var(--s-up8) * var(--s-ratio));
+  --s-up10: calc(var(--s-up9) * var(--s-ratio));
+  --s-down1: calc(var(--s-base) / var(--s-ratio2));
+  --s-down2: calc(var(--s-down1) / var(--s-ratio2));
+  --s-down3: calc(var(--s-down2) / var(--s-ratio2));
+}
+
+.slidev-layout {
+  font-variant-ligatures: none;
+
+  .prose :where(:not(pre) > code):not(:where(.not-prose, .not-prose *)) {
+    padding: 0;
+  }
+
+  .prose :where(:not(pre) > code):not(:where(.not-prose, .not-prose *)) {
+
+    &::before,
+    &::after {
+      content: '';
+    }
+  }
+
+  :is([prose=""], .prose) :where(blockquote):not(:where(.not-prose, .not-prose *)) {
+    padding: var(--s-down1) !important;
+  }
+
+}

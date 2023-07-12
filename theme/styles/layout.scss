@@ -21,7 +21,7 @@ html:not(.dark) #slide-content {
   }
 
   a {
-    @apply text-secondary-300 hover:text-secondary-500;
+    @apply text-secondary-300 hover: text-secondary-500;
   }
 }
 
@@ -44,7 +44,7 @@ html:not(.dark) #slide-content {
   }
 
   a {
-    @apply text-secondary-400 hover:text-secondary-500 dark:text-gray-50 dark:hover:text-secondary-500 transition ease-in-out duration-300;
+    @apply text-secondary-400 hover: text-secondary-500 dark:text-gray-50 dark:hover:text-secondary-500 transition ease-in-out duration-300;
   }
 
   img {
@@ -56,14 +56,14 @@ html:not(.dark) #slide-content {
   }
 
   .prose {
-    > ul {
+    >ul {
       li {
         margin-left: 0;
       }
     }
 
-    :where(code):not(:where(.not-prose,.not-prose *)) {
-      font-size: revert;
+    :where(code):not(:where(.not-prose, .not-prose *)) {
+      font-size: inherit;
     }
   }
 
@@ -94,16 +94,16 @@ html:not(.dark) #slide-content {
     @apply text-secondary-300;
   }
 
-  .slidev-code-wrapper > pre {
+  .slidev-code-wrapper>pre {
     width: max-content;
     min-width: 400px;
     max-width: 100%;
   }
 
-  .console .slidev-code-wrapper  {
+  .console .slidev-code-wrapper {
     @apply m0;
 
-    > pre {
+    >pre {
       width: 100%;
     }
   }

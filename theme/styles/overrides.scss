@@ -9,3 +9,11 @@
 .console .slidev-code-wrapper {
   margin: 0 !important;
 }
+
+.slidev-layout .prose :where(:not(pre) > code):not(:where(.not-prose, .not-prose *)) {
+  @apply font-normal;
+  padding: 0 !important;
+  // margin-inline-end: 1ex;
+  color: oklch(30% 0.1 200) !important;
+  background-color: oklch(90% 0.1 200) !important;
+}

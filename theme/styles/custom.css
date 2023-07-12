@@ -1,9 +1,42 @@
 h1.fancy {
-  background-color: #2B90B6;
-  background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
+  background-color: #2b90b6;
+  background-image: linear-gradient(45deg, #4ec5d4 10%, #146b8c 20%);
   background-size: 100%;
   -webkit-background-clip: text;
   -moz-background-clip: text;
   -webkit-text-fill-color: transparent;
   -moz-text-fill-color: transparent;
+}
+
+blockquote.emphasize {
+  @apply font-bold;
+  --current-hue: var(--hue-polaris);
+  background-color: var(--color-accent) !important;
+  color: var(--color-fg) !important;
+}
+
+blockquote.header {
+  display: grid;
+  align-items: first baseline;
+  height: max-content;
+  column-gap: var(--s-up3);
+  grid-template-columns: 0 max-content 1fr var(--s-up3);
+  text-align: start;
+
+  p {
+    grid-column: 3;
+    margin-block: var(--s-up3);
+  }
+
+  p,
+  &::before {
+    font-size: var(--s-up4);
+    line-height: var(--s-up6) !important;
+  }
+
+  &::before {
+    content: attr(content);
+    grid-column: 2;
+    align-self: baseline;
+  }
 }

@@ -1,8 +1,21 @@
 :root {
-  --color-octane: oklch(83% 0.15 70.67);
-  --color-octane-accent: oklch(92% 0.20 70.67);
-  --color-polaris: oklch(83% 0.15 285.86);
+  --lt-fg: 40%;
+  --lt-accent-fg: 60%;
+  --lt-mid: 75%;
+  --lt-bright: 83%;
+  --lt-accent: 92%;
+  --chroma-normal: 0.15;
+  --hue-octane: 71;
+  --hue-polaris: 285;
+
+
+  --color-neutral-accent: oklch(var(--lt-bright) var(--chroma-normal) var(--hue-octane));
+  --color-octane: oklch(var(--lt-bright) var(--chroma-normal) var(--hue-octane));
+  --color-octane-fg: oklch(var(--lt-fg) var(--chroma-normal) var(--hue-octane));
+  --color-octane-accent: oklch(var(--lt-accent) var(--chroma-normal) var(--hue-octane));
+  --color-polaris: oklch(var(--lt-bright) var(--chroma-normal) var(--hue-polaris));
   --color-polaris-accent: oklch(92% 0.20 285.86);
+  --color-heading-accent: oklch(83% 0.15 285.86);
 
   --shiki-color-text: #F8F8F2;
   --shiki-color-background: #282A36;
@@ -51,7 +64,24 @@
   --shiki-color-ansi-bright-white-dim: #ffffff80;
 }
 
+*,
+::before,
+::after,
+::marker {
+  --color-normal: oklch(var(--lt-bright) var(--chroma-normal) var(--current-hue));
+  --color-mid: oklch(var(--lt-mid) var(--chroma-normal) var(--current-hue));
+
+  --color-fg: oklch(var(--lt-fg) var(--chroma-normal) var(--current-hue));
+  --color-accent-fg: oklch(var(--lt-accent-fg) var(--chroma-normal) var(--current-hue));
+
+  --color-accent: oklch(var(--lt-accent) var(--chroma-normal) var(--current-hue));
+}
+
 .slidev-layout {
+
+  .accent {
+    color: var(--color-heading-accent);
+  }
 
   .polaris {
     color: var(--color-polaris);

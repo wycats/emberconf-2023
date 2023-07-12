@@ -694,6 +694,20 @@
       }
     },
     {
+      "name": "Tag Punctuation",
+      "scope": ["punctuation.definition.tag"],
+      "settings": {
+        "foreground": "#ffaed9"
+      }
+    },
+    {
+      "name": "HBS Punctuation",
+      "scope": ["meta.tag.any.handlebars punctuation.definition.tag"],
+      "settings": {
+        "foreground": "#8be9fd"
+      }
+    },
+    {
       "name": "Brackets, braces, parens, etc.",
       "scope": [
         "keyword.operator.other.powershell",
@@ -715,7 +729,7 @@
         "string.template punctuation.accessor"
       ],
       "settings": {
-        "foreground": "#F8F8F2"
+        "foreground": "#ff0000"
       }
     },
     {
