@@ -11,5 +11,6 @@
     "strict": true,
     "skipLibCheck": true,
     "types": ["@slidev/types"]
-  }
+  },
+  "include": ["**/*.ts", "**/*.vue", "**/*.md"]
 }

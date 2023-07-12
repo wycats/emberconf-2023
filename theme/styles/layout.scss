@@ -37,6 +37,10 @@ html:not(.dark) #slide-content {
   h3,
   h4 {
     @apply font-display;
+
+    code {
+      font-weight: bold;
+    }
   }
 
   a {
@@ -51,11 +55,18 @@ html:not(.dark) #slide-content {
     @apply list-disc;
   }
 
-  .prose > ul {
-    li {
-      margin-left: 0;
+  .prose {
+    > ul {
+      li {
+        margin-left: 0;
+      }
+    }
+
+    :where(code):not(:where(.not-prose,.not-prose *)) {
+      font-size: revert;
     }
   }
+
 
   ul.emoji-list {
     list-style: none;
@@ -63,8 +74,8 @@ html:not(.dark) #slide-content {
     margin: 0;
 
     li {
-      padding-left: 1rem;
-      text-indent: -0.7rem;
+      padding-left: var(--s-base);
+      text-indent: calc(var(--s-down1) * -1);
     }
 
     li::before {
@@ -73,22 +84,28 @@ html:not(.dark) #slide-content {
   }
 
   pre {
-    @apply font-bold;
-    font-size: 0.65rem !important;
+    @apply font-normal;
+    font-size: var(--s-down2);
     scrollbar-gutter: stable;
     overflow: auto;
   }
 
   code {
     @apply text-secondary-300;
-
-    font-size: 0.65rem !important;
   }
 
   .slidev-code-wrapper > pre {
     width: max-content;
     min-width: 400px;
     max-width: 100%;
+  }
+
+  .console .slidev-code-wrapper  {
+    @apply m0;
+
+    > pre {
+      width: 100%;
+    }
   }
 
   iframe label.btn {

@@ -57,30 +57,69 @@ layout: intro
 
 <style>
   ul {
-    list-style-type: none;
     display: grid;
     justify-items: start;
     justify-content: center;
-    row-gap: 2rem;
+    row-gap: var(--s-base);
   }
   li {
-    font-size: 2rem;
+    list-style-type: none;
+    font-size: var(--s-up3);
   }
 </style>
 
 ---
-layout: default
+layout: two-cols
+clicks: 2
 ---
 
-# Table of contents
+# `<template>` {.text-center}
 
-<the-console>
-  <iframe height="300" style="width: 100%;" scrolling="no" title="Text Clock" src="https://codepen.io/searleb/embed/pvQaJB?default-tab=html%2Cresult" frameborder="no" loading="lazy" allowtransparency="true" allowfullscreen="true">
-    See the Pen <a href="https://codepen.io/searleb/pen/pvQaJB">
-    Text Clock</a> by Bill Searle (<a href="https://codepen.io/searleb">@searleb</a>)
-    on <a href="https://codepen.io">CodePen</a>.
-  </iframe>
-</the-console>
+::a::
+
+### Octane Colocation {.not-prose .octane}
+
+<TheConsole title="counter.ts">
+
+```ts {all|2|none} {at:0}
+class Counter extends Component {
+  @tracked count = 0; // [!code hl]
+  increment = () => this.count++;
+}
+```
+
+</TheConsole>
+
+<TheConsole title="counter.hbs">
+
+```hbs {none|none|all} {at:0}
+<p>{{this.count}}</p>
+
+<button {{on "click" this.increment}}>increment</button>
+```
+
+</TheConsole>
+
+
+::b::
+
+### Polaris `<template>` {.not-prose .polaris}
+
+<TheConsole title="counter.gjs">
+
+```ts {all|2|5-9} {at:0}
+class Counter extends Component {
+  @tracked accessor count = 0; // [!code hl]
+  increment = () => this.count++; 
+
+  <template> // [!code focus:4]
+    <p>{{this.count}}</p>
+    <button {{on "click" this.increment}}>increment</button>
+  </template>
+}
+```
+
+</TheConsole>
 
 ---
 transition: slide-up

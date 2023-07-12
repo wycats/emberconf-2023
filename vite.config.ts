@@ -1,7 +1,7 @@
-import type { SlidevConfig } from "@slidev/types";
 import { defineConfig } from "vite";
 import type MarkdownIt from "markdown-it";
 import attrs from "markdown-it-attrs";
+import type { SlidevPluginOptions } from "@slidev/cli/dist/index.js";
 
 export default defineConfig({
   slidev: {
@@ -13,6 +13,5 @@ export default defineConfig({
       },
     },
     /* options for other plugins */
-  } as any,
-  esbuild: {},
+  } satisfies SlidevPluginOptions,
 });

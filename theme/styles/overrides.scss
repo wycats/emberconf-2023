@@ -1,0 +1,11 @@
+// This file contains overrides for `!important` styles in the base layout
+
+
+
+.prose pre:not(:where(.not-prose)) {
+  @apply m0;
+}
+
+.console .slidev-code-wrapper {
+  margin: 0 !important;
+}

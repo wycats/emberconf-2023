@@ -8,10 +8,11 @@
     "export": "slidev export"
   },
   "dependencies": {
+    "@alvarosabu/ui": "^2.20.0",
     "@slidev/cli": "^0.42.5",
     "markdown-it-attrs": "^4.1.6",
+    "shiki-processor": "^0.1.3",
     "vite": "^4.4.2",
-    "@alvarosabu/ui": "^2.20.0",
     "vite-svg-loader": "^4.0.0"
   },
   "devDependencies": {
@@ -24,5 +25,9 @@
     "sass": "^1.63.6",
     "typescript": "^5.1.6",
     "unocss": "^0.53.5"
+  },
+  "volta": {
+    "node": "18.16.1",
+    "pnpm": "8.6.7"
   }
 }

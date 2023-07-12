@@ -1,0 +1,14 @@
+:root {
+  font-size: 16px;
+  --s-ratio: 1.3;
+  --s-base: 1rem;
+  --s-up1: calc(var(--s-base) * var(--s-ratio));
+  --s-up2: calc(var(--s-up1) * var(--s-ratio));
+  --s-up3: calc(var(--s-up2) * var(--s-ratio));
+  --s-up4: calc(var(--s-up3) * var(--s-ratio));
+  --s-up5: calc(var(--s-up4) * var(--s-ratio));
+  --s-up6: calc(var(--s-up5) * var(--s-ratio));
+  --s-down1: calc(var(--s-base) / var(--s-ratio));
+  --s-down2: calc(var(--s-down1) / var(--s-ratio));
+  --s-down3: calc(var(--s-down2) / var(--s-ratio));
+}

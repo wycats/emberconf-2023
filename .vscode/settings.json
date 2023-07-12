@@ -8,5 +8,15 @@
   "css.lint.unknownAtRules": "ignore",
   "[markdown]": {
     "editor.defaultFormatter": "vscode.markdown-language-features"
-  }
+  },
+  "[vue]": {
+    "editor.defaultFormatter": "Vue.volar"
+  },
+  "[scss]": {
+    "editor.defaultFormatter": "vscode.css-language-features"
+  },
+  "vue.inlayHints.inlineHandlerLeading": true,
+  "vue.inlayHints.missingProps": true,
+  "vue.inlayHints.optionsWrapper": true,
+  "vue.server.fullCompletionList": true
 }
