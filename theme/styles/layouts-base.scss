@@ -1,3 +1,17 @@
+@mixin not($shorthand) {
+  &:not([class*=" #{$shorthand}-"]):not([class^="#{$shorthand}-"]):not([class*=" #{$shorthand}x-"]):not([class*=" #{$shorthand}y-"]):not([class^="#{$shorthand}x-"]):not([class^="#{$shorthand}y-"]):not([class*=" #{$shorthand}t-"]):not([class^="#{$shorthand}t-"]):not([class*=" #{$shorthand}b-"]):not([class^="#{$shorthand}b-"]):not([class*=" #{$shorthand}l-"]):not([class^="#{$shorthand}l-"]):not([class*=" #{$shorthand}r-"]):not([class^="#{$shorthand}r-"]) {
+    @content;
+  }
+}
+
+@mixin not-class-starts($start...) {
+  @for $i from 0 to length($start) {
+    &:not([class*=" #{nth($start, $i + 1)}"]):not([class^="#{nth($start, $i + 1)}"]) {
+      @content;
+    }
+  }
+}
+
 .slidev-layout {
   @apply px-14 py-10 text-[1.1rem] h-full;
 
@@ -39,8 +53,18 @@
   }
 
   p {
-    @apply my-4 leading-6;
+    @apply leading-6;
   }
+
+  p {
+    @include not(m) {
+      @apply my-4;
+    }
+  }
+
+  // p:not([class*=" m-"]):not([class^="m-"]):not([class*=" mx-"]):not([class*=" my-"]):not([class^="mx-"]):not([class^="my-"]) {
+  //   @apply my-4
+  // }
 
   ul {
     list-style: square;
@@ -55,12 +79,19 @@
   }
 
   blockquote {
-    @apply text-sm px-2 py-1 bg-$prism-background text-$prism-foreground border-$slidev-theme-primary border-l rounded;
+    @apply text-sm my-0 bg-$prism-background text-$prism-foreground border-$slidev-theme-primary border-l rounded;
+
+    @include not(p) {
+      @apply px-2 py-1
+    }
+
+    >* {
+      @include not(m) {
+        @apply my-0;
+      }
+    }
   }
 
-  blockquote>* {
-    @apply my-0;
-  }
 
   table {
     @apply w-full;

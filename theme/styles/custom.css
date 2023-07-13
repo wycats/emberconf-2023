@@ -25,11 +25,11 @@ blockquote.header {
 
   p {
     grid-column: 3;
-    margin-block: var(--s-up3);
   }
 
-  p,
+  p:not(class*='fs-'),
   &::before {
+    margin-block: var(--s-up3);
     font-size: var(--s-up4);
     line-height: var(--s-up6) !important;
   }

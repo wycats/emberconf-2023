@@ -10,7 +10,20 @@ import {
 } from "unocss";
 
 export default defineConfig({
-  rules: [[/^fs-(.*)$/, ([, c]) => ({ "font-size": `var(--s-${c})` })]],
+  rules: [
+    [
+      /^fs-(.*)$/,
+      ([, c]) => ({
+        "font-size": `var(--s-${c})`,
+      }),
+    ],
+    [
+      /^lh-(.*)$/,
+      ([, c]) => ({
+        "line-height": `var(--s-${c}) !important`,
+      }),
+    ],
+  ],
   theme: {
     colors: {
       // ...

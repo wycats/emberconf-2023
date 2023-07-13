@@ -176,7 +176,7 @@ class Counter extends Component {
 
 <TheConsole title="counter.gjs">
 
-```ts {all|5|8-12} {at:0}
+```ts {all|5|8-14} {at:0}
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 
@@ -184,7 +184,7 @@ class Counter extends Component {
   @tracked accessor count = 0; // [!code hl]
   increment = () => this.count++; 
 
-  <template> // [!code focus:4]
+  <template> // [!code focus:6]
     <p>{{this.count}}</p>
     <button {{on "click" this.increment}}>
       increment
@@ -459,6 +459,275 @@ const Toggle = <template>
 
 ---
 layout: section
+heading: center
+---
+
+# Resources
+
+Resources are reactive objects with lifecycle. {.text-center}
+
+> They rationalize [class-based helpers]{.inline-li content="a"}, 
+> [modifiers]{.inline-li content="b"}, [services]{.inline-li content="c"}, 
+> and even [routing]{.inline-li content="d"} (as we'll see in a bit).
+> {.emphasize .header content="🤝"}
+
+---
+layout: two-cols
+code: small
+---
+
+# Template Helpers With Lifecycle
+
+::a::
+
+### Octane: "Class-Based Helpers" {.not-prose .octane}
+
+<the-console title="current-time.ts">
+
+```ts
+export default class CurrentTime {
+  #timer = setInterval(() => { this.current = new Date() });
+  @tracked current = new Date();
+
+  compute() {
+    return this.current;
+  }
+
+  willDestroy() {
+    clearInterval(this.#timer);
+  }
+}
+```
+
+</the-console>
+
+<the-console title="clock.hbs">
+
+```hbs
+<p>{{format-date (current-time)}}</p>
+```
+
+</the-console>
+
+::b::
+
+### Polaris: Resources {.not-prose .polaris}
+
+<the-console title="clock.gts">
+
+```ts
+import formatDate from "./utils/format-date";
+import { Resource, Cell } from "@starbeam/universal";
+
+<template>
+  <p>{{formatDate (currentTime)}}</p>
+</template>
+
+const currentTime = Resource(({ on }) => {
+  const current = Cell(new Date());
+
+  on.setup(() => {
+    const timer = setInterval(() => current.set(new Date()), 1000);
+    return () => clearInterval(timer);
+  });
+
+  return current;
+});
+```
+
+</the-console>
+
+---
+layout: two-cols
+kind: polaris
+code: small
+---
+
+# Services
+
+## A Service is a Resource Scoped to an App {.polaris}
+
+::a::
+
+<the-console title="app/services/current-time.ts">
+
+```ts
+import { Resource } from "@starbeam/universal";
+
+export default Resource(({ on }) => {
+  const current = Cell(new Date());
+
+  on.setup(() => {
+    const timer = setInterval(() => current.set(new Date()), 1000);
+    return () => clearInterval(timer);
+  });
+
+  return current;
+});
+```
+
+</the-console>
+
+::b::
+
+<the-console title="app/components/clock.gts">
+
+```ts
+import { service } from "@starbeam/universal";
+import { Component } from "@glimmer/component";
+
+import CurrentTime from "#app/services/current-time";
+import formatDate from "#app/utils/format-date";
+
+export default Clock extends Component {
+  #currentTime = service(CurrentTime);
+
+  <template>
+    <p>{{format-date this.#currentTime}}</p>
+  </template>
+}
+```
+
+</the-console>
+
+> The `currentTime` field is correctly inferred by TypeScript.
+> {.emphasize v-click}
+
+
+---
+layout: two-cols
+kind: polaris
+code: small
+---
+
+# Modifiers
+
+## A Modifier is a Resource Scoped to an Element {.polaris}
+
+::a::
+
+<the-console title="app/modifiers/element-size.ts">
+
+```ts
+import { Resource } from "@starbeam/universal";
+
+export default function elementSize (
+  element: HTMLElement,
+  update: (size: BoundingClientRect) => void) => 
+    Resource(({ on }) => {
+      update(element.getBoundingClientRect());
+
+      on.setup(() => {
+        const observer = new ResizeObserver(() => {
+          update(element.getBoundingClientRect());
+        });
+
+        return () => observer.disconnect();
+      });
+    });
+```
+
+</the-console>
+
+::b::
+
+<the-console title="app/components/clock.gts">
+
+```ts
+import { service } from "@ember/service";
+import { Component } from "@glimmer/component";
+
+import elementSize from "@/modifiers/element-size";
+
+export default Clock extends Component {
+  @tracked accessor #size: DOMRect;
+
+  <template>
+    <div {{elementSize this.#updateSize}}>{{yield}}</div>
+    <p>The size is {{this.#size.width}}x{{this.#size.height}}</p>
+  </template>
+
+  #updateSize(size: DOMRect) {
+    this.#size = size;
+  }
+}
+```
+
+</the-console>
+
+---
+layout: two-cols
+prose: small
+---
+
+# What is `@starbeam/universal`
+
+
+
+
+::b::
+
+
+<the-console title="clock.jsx">
+
+```ts{all|1}
+import { useModifier } from "@starbeam/react"; // [!code focus]
+import elementSize from "@ui/library";
+
+export default function Clock({ children }) {
+  const [size, setSize] = useState(null);
+  const element = useRef(null);
+
+  useModifier(elementSize, element, setSize);
+
+  return (
+    <>
+      <div ref={element}>{children}</div>
+      <p>The size is {size.width}x{size.height}</p>
+    </>
+  )
+}
+```
+
+</the-console>
+
+::a::
+
+Code written using `@starbeam/universal` APIs will also work in other frameworks with a Starbeam renderer.
+
+<the-console title="app/modifiers/element-size.ts">
+
+```ts{all|1}
+import { Resource } from "@starbeam/universal"; // [!code focus]
+
+export default function (element, update) => 
+  Resource(({ on }) => {
+    update(element.getBoundingClientRect());
+
+    on.setup(() => {
+      const observer = new ResizeObserver(() => {
+        update(element.getBoundingClientRect());
+      });
+
+      return () => observer.disconnect();
+    });
+  });
+```
+
+</the-console>
+
+---
+layout: intro
+---
+
+### Which brings us to...
+
+# Routing
+
+## A route's model is a Resource scoped to its route. {.polaris}
+
+---
+layout: section
 ---
 
 # Routing {.text-center}
@@ -476,350 +745,19 @@ Routing has been at the heart of Ember since Ember 1.0. {.text-center}
 </style>
 
 ---
-layout: default
+layout: section
 ---
 
 # What Does "Good URL Support" Mean?
 
----
+- The back-button works
+- Reloading the page works
 
-# Navigation
-
-Hover on the bottom-left corner to see the navigation's controls panel, [learn more](https://sli.dev/guide/navigation.html)
-
-### Keyboard Shortcuts
-
-|                                                    |                             |
-| -------------------------------------------------- | --------------------------- |
-| <kbd>right</kbd> / <kbd>space</kbd>                | next animation or slide     |
-| <kbd>left</kbd> / <kbd>shift</kbd><kbd>space</kbd> | previous animation or slide |
-| <kbd>up</kbd>                                      | previous slide              |
-| <kbd>down</kbd>                                    | next slide                  |
-
-<!-- https://sli.dev/guide/animations.html#click-animations -->
-
-<img
-  v-click
-  class="absolute -bottom-9 -left-7 w-80 opacity-50"
-  src="https://sli.dev/assets/arrow-bottom-left.svg"
-/>
-
-<p v-after class="absolute bottom-23 left-45 opacity-30 transform -rotate-10">Here!</p>
+> "works" means that the page looks the way the user expected it to look. {.fs-up2 .my-3}
+> 
+> This means that meaningful state, especially the current page, is preserved. It also means that
+> it's possible to create permalinks that include active filters and other "query param" state.
+> {.fs-down1 .lh-base}
+> {.emphasize .header .p-1}
 
 ---
-layout: image-right
-image: https://source.unsplash.com/collection/94734566/1920x1080
----
-
-# Code
-
-Use code snippets and get the highlighting directly![^1]
-
-```ts {all|2|1-6|9|all}
-interface User {
-  id: number;
-  firstName: string;
-  lastName: string;
-  role: string;
-}
-
-<template>
-  <h1>Hi</h1>
-  {{#if (a hello) as |b|}}
-    <b @c={{d}} />
-  {{/if}}
-</template>
-
-function updateUser(id: number, update: User) {
-  const user = getUser(id);
-  const newUser = { ...user, ...update };
-  saveUser(id, newUser);
-}
-```
-
-<arrow v-click="3" x1="400" y1="420" x2="230" y2="330" color="#564" width="3" arrowSize="1" />
-
-[^1]: [Learn More](https://sli.dev/guide/syntax.html#line-highlighting)
-
-<style>
-.footnotes-sep {
-  @apply mt-20 opacity-10;
-}
-.footnotes {
-  @apply text-sm opacity-75;
-}
-.footnote-backref {
-  display: none;
-}
-</style>
-
----
-
-# Components
-
-<div grid="~ cols-2 gap-4">
-<div>
-
-You can use Vue components directly inside your slides.
-
-We have provided a few built-in components like `<Tweet/>` and `<Youtube/>` that you can use directly. And adding your custom components is also super easy.
-
-```html
-<Counter :count="10" />
-```
-
-<!-- ./components/Counter.vue -->
-<Counter :count="10" m="t-4" />
-
-Check out [the guides](https://sli.dev/builtin/components.html) for more.
-
-</div>
-<div>
-
-```html
-<Tweet id="1390115482657726468" />
-```
-
-<Tweet id="1390115482657726468" scale="0.65" />
-
-</div>
-</div>
-
-<!--
-Presenter note with **bold**, *italic*, and ~~striked~~ text.
-
-Also, HTML elements are valid:
-<div class="flex w-full">
-  <span style="flex-grow: 1;">Left content</span>
-  <span>Right content</span>
-</div>
--->
-
----
-class: px-20
----
-
-# Themes
-
-Slidev comes with powerful theming support. Themes can provide styles, layouts, components, or even configurations for tools. Switching between themes by just **one edit** in your frontmatter:
-
-<div grid="~ cols-2 gap-2" m="-t-2">
-
-```yaml
----
-theme: default
----
-```
-
-```yaml
----
-theme: seriph
----
-```
-
-<img border="rounded" src="https://github.com/slidevjs/themes/blob/main/screenshots/theme-default/01.png?raw=true">
-
-<img border="rounded" src="https://github.com/slidevjs/themes/blob/main/screenshots/theme-seriph/01.png?raw=true">
-
-</div>
-
-Read more about [How to use a theme](https://sli.dev/themes/use.html) and
-check out the [Awesome Themes Gallery](https://sli.dev/themes/gallery.html).
-
----
-preload: false
----
-
-# Animations
-
-Animations are powered by [@vueuse/motion](https://motion.vueuse.org/).
-
-```html
-<div v-motion :initial="{ x: -80 }" :enter="{ x: 0 }">Slidev</div>
-```
-
-<div class="w-60 relative mt-6">
-  <div class="relative w-40 h-40">
-    <img
-      v-motion
-      :initial="{ x: 800, y: -100, scale: 1.5, rotate: -50 }"
-      :enter="final"
-      class="absolute top-0 left-0 right-0 bottom-0"
-      src="https://sli.dev/logo-square.png"
-    />
-    <img
-      v-motion
-      :initial="{ y: 500, x: -100, scale: 2 }"
-      :enter="final"
-      class="absolute top-0 left-0 right-0 bottom-0"
-      src="https://sli.dev/logo-circle.png"
-    />
-    <img
-      v-motion
-      :initial="{ x: 600, y: 400, scale: 2, rotate: 100 }"
-      :enter="final"
-      class="absolute top-0 left-0 right-0 bottom-0"
-      src="https://sli.dev/logo-triangle.png"
-    />
-  </div>
-
-  <div
-    class="text-5xl absolute top-14 left-40 text-[#2B90B6] -z-1"
-    v-motion
-    :initial="{ x: -80, opacity: 0}"
-    :enter="{ x: 0, opacity: 1, transition: { delay: 2000, duration: 1000 } }">
-    Slidev
-  </div>
-</div>
-
-<!-- vue script setup scripts can be directly used in markdown, and will only affects current page -->
-<script setup lang="ts">
-const final = {
-  x: 0,
-  y: 0,
-  rotate: 0,
-  scale: 1,
-  transition: {
-    type: 'spring',
-    damping: 10,
-    stiffness: 20,
-    mass: 2
-  }
-}
-</script>
-
-<div
-  v-motion
-  :initial="{ x:35, y: 40, opacity: 0}"
-  :enter="{ y: 0, opacity: 1, transition: { delay: 3500 } }">
-
-[Learn More](https://sli.dev/guide/animations.html#motion)
-
-</div>
-
----
-
-# LaTeX
-
-LaTeX is supported out-of-box powered by [KaTeX](https://katex.org/).
-
-<br>
-
-Inline $\sqrt{3x-1}+(1+x)^2$
-
-Block
-
-$$
-\begin{array}{c}
-
-\nabla \times \vec{\mathbf{B}} -\, \frac1c\, \frac{\partial\vec{\mathbf{E}}}{\partial t} &
-= \frac{4\pi}{c}\vec{\mathbf{j}}    \nabla \cdot \vec{\mathbf{E}} & = 4 \pi \rho \\
-
-\nabla \times \vec{\mathbf{E}}\, +\, \frac1c\, \frac{\partial\vec{\mathbf{B}}}{\partial t} & = \vec{\mathbf{0}} \\
-
-\nabla \cdot \vec{\mathbf{B}} & = 0
-
-\end{array}
-$$
-
-<br>
-
-[Learn more](https://sli.dev/guide/syntax#latex)
-
----
-
-# Diagrams
-
-You can create diagrams / graphs from textual descriptions, directly in your Markdown.
-
-<div class="grid grid-cols-3 gap-10 pt-4 -mb-6">
-
-```mermaid {scale: 0.5}
-sequenceDiagram
-    Alice->John: Hello John, how are you?
-    Note over Alice,John: A typical interaction
-```
-
-```mermaid {theme: 'neutral', scale: 0.8}
-graph TD
-B[Text] --> C{Decision}
-C -->|One| D[Result 1]
-C -->|Two| E[Result 2]
-```
-
-```mermaid
-mindmap
-  root((mindmap))
-    Origins
-      Long history
-      ::icon(fa fa-book)
-      Popularisation
-        British popular psychology author Tony Buzan
-    Research
-      On effectivness<br/>and features
-      On Automatic creation
-        Uses
-            Creative techniques
-            Strategic planning
-            Argument mapping
-    Tools
-      Pen and paper
-      Mermaid
-```
-
-```plantuml {scale: 0.7}
-@startuml
-
-package "Some Group" {
-  HTTP - [First Component]
-  [Another Component]
-}
-
-node "Other Groups" {
-  FTP - [Second Component]
-  [First Component] --> FTP
-}
-
-cloud {
-  [Example 1]
-}
-
-
-database "MySql" {
-  folder "This is my folder" {
-    [Folder 3]
-  }
-  frame "Foo" {
-    [Frame 4]
-  }
-}
-
-
-[Another Component] --> [Example 1]
-[Example 1] --> [Folder 3]
-[Folder 3] --> [Frame 4]
-
-@enduml
-```
-
-</div>
-
-[Learn More](https://sli.dev/guide/syntax.html#diagrams)
-
----
-
-src: ./pages/multiple-entries.md
-hide: false
-
----
-
----
-
-layout: center
-class: text-center
-
----
-
-# Learn More
-
-[Documentations](https://sli.dev) · [GitHub](https://github.com/slidevjs/slidev) · [Showcases](https://sli.dev/showcases.html)
