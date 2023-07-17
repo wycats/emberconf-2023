@@ -1,3 +1,5 @@
+@use "./mixins.scss";
+
 :root {
   // default theme color
   // can be overrided by uses `themeConfig` option
@@ -25,11 +27,21 @@ html:not(.dark) #slide-content {
   }
 }
 
-.slidev-layout {
-  @apply relative h-full;
+#slideshow {
+  @apply relative;
+  contain: paint;
+}
+
+div.slidev-layout {
+  @apply grid relative w-full h-full;
+  grid-template-columns: auto;
+  grid-auto-rows: min(max-content, 1fr);
+  contain: strict;
 
   h1 {
-    @apply mb-8 mt-0;
+    @include mixins.not(m) {
+      @apply mb-8 mt-0;
+    }
   }
 
   h1,
@@ -39,7 +51,7 @@ html:not(.dark) #slide-content {
     @apply font-display;
 
     code {
-      font-weight: bold;
+      @apply font-bold;
     }
   }
 
@@ -84,15 +96,9 @@ html:not(.dark) #slide-content {
   }
 
   pre {
-    @apply font-normal;
-    font-size: var(--s-down2);
-    scrollbar-gutter: stable;
-    overflow: auto;
+    @apply font-normal overflow-auto;
   }
 
-  code {
-    @apply text-secondary-300;
-  }
 
   .slidev-code-wrapper>pre {
     width: max-content;

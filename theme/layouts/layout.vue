@@ -32,11 +32,11 @@ const className = computed(() => {
     <header>
       <slot name="default" />
     </header>
-    <div class="grid">
-      <div class="prose">
+    <div class="grid columns">
+      <div class="prose flex column">
         <slot name="a"></slot>
       </div>
-      <div class="prose">
+      <div class="prose flex column">
         <slot name="b"></slot>
       </div>
     </div>
@@ -44,9 +44,59 @@ const className = computed(() => {
 </template>
 
 <style scoped lang="scss">
-.slidev-layout :deep(pre) {
-  font-size: var(--s-down1);
+.columns {
+  contain: strict;
+  align-items: start;
 }
+
+.column {
+  display: grid;
+  grid-auto-flow: row dense;
+  // grid-template-rows: max-content;
+  width: 100%;
+  height: 100%;
+  contain: strict;
+  align-items: start;
+
+  grid-template-columns: 1fr;
+  row-gap: var(--s-base);
+
+  :deep(>*) {
+    margin: 0 !important;
+  }
+
+  :deep(h1, h2, h3, h4, h5, h6) {
+    height: max-content;
+  }
+
+  &:has(*) {
+    grid-template-rows: 1fr;
+  }
+
+  &:has(> :nth-child(2)) {
+    grid-template-rows: max-content 1fr;
+  }
+
+  &:has(> :nth-child(3)) {
+    grid-template-rows: max-content max-content 1fr;
+  }
+
+  &:has(> :nth-child(4)) {
+    grid-template-rows: max-content max-content max-content 1fr;
+  }
+
+  &:has(> :nth-child(5)) {
+    grid-template-rows: max-content max-content max-content max-content 1fr;
+  }
+
+
+
+}
+
+.slidev-layout {
+  grid-template-rows: max-content 1fr;
+}
+
 
 .slidev-layout.prose-small :deep(p) {
   &:not([class^="fs-"]) {
@@ -64,17 +114,6 @@ const className = computed(() => {
   display: grid;
   grid-template-columns: v-bind(columns);
   @apply gap-4;
-
-  >.prose {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-auto-rows: max-content;
-    row-gap: var(--s-base);
-
-    :deep(>*) {
-      margin: 0 !important;
-    }
-  }
 }
 
 .slidev-layout {
@@ -115,15 +154,5 @@ const className = computed(() => {
   grid-auto-flow: column;
   @apply gap-4;
 
-  >.prose {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-auto-rows: max-content;
-    row-gap: var(--s-base);
-
-    :deep(>*) {
-      margin: 0 !important;
-    }
-  }
 }
 </style>

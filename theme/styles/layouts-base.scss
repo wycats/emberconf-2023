@@ -25,22 +25,34 @@
   }
 
   h1 {
-    @apply text-4xl mb-4;
+    @include not(m) {
+      @apply mb-4;
+    }
+
+    @include not-class-starts(text-) {
+      @apply text-4xl;
+    }
   }
 
   h2 {
-    @apply text-3xl;
+    @include not-class-starts(text-) {
+      @apply text-3xl;
+    }
   }
 
   h3 {
-    @apply text-2xl;
+    @include not-class-starts(text-) {
+      @apply text-2xl;
+    }
   }
 
   h4 {
-    @apply text-xl;
+    @include not-class-starts(text-) {
+      @apply text-xl;
+    }
   }
 
-  h5 {
+  h5:not([class^="font-"]):not([class*=" font-"]) {
     @apply text-base;
   }
 
@@ -52,8 +64,10 @@
     @apply opacity-40;
   }
 
-  p {
-    @apply leading-6;
+  :not(blockquote)>p {
+    @include not(lh) {
+      @apply leading-6;
+    }
   }
 
   p {
@@ -79,7 +93,11 @@
   }
 
   blockquote {
-    @apply text-sm my-0 bg-$prism-background text-$prism-foreground border-$slidev-theme-primary border-l rounded;
+    @apply bg-$prism-background text-$prism-foreground border-$slidev-theme-primary border-l rounded;
+
+    @include not(fs) {
+      @apply text-sm;
+    }
 
     @include not(p) {
       @apply px-2 py-1

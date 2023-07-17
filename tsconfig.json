@@ -1,15 +1,29 @@
 {
   "compilerOptions": {
-    "incremental": true,
     "target": "ESNext",
     "module": "ESNext",
-    "moduleResolution": "NodeNext",
+    "allowJs": true,
+    "allowArbitraryExtensions": true,
+    "listFiles": true,
+    "moduleResolution": "node",
     "esModuleInterop": true,
-    "moduleDetection": "auto",
+    "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "skipLibCheck": true,
     "types": ["@slidev/types"]
   },
-  "include": ["**/*.ts", "**/*.vue", "**/*.md"]
+  "include": [
+    "**/*.ts",
+    "**/*.vue",
+    "**/*.md",
+    "slides.md",
+    "components.d.ts",
+    "volar.config.js"
+  ],
+  "references": [
+    {
+      "path": "./packages/fenced-container/tsconfig.json"
+    }
+  ]
 }

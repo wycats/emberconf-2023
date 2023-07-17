@@ -20,6 +20,7 @@ export default defineShikiSetup(async (shiki) => {
   const js = findLang("js");
   const html = findLang("html");
   const yaml = findLang("yaml");
+  const md = findLang("md");
 
   const theme = await shiki.loadTheme(
     resolve(__dirname, "themes", "dracula.json")
@@ -32,6 +33,7 @@ export default defineShikiSetup(async (shiki) => {
       yaml,
       ts,
       js,
+      md,
       {
         id: "handlebars",
         scopeName: "text.html.handlebars",
@@ -51,15 +53,16 @@ export default defineShikiSetup(async (shiki) => {
   const codeToHTML = highlighter.codeToHtml;
 
   highlighter.codeToHtml = ((code: string, options: CodeToHtmlOptions) => {
-    console.log(
-      highlighter
-        .codeToThemedTokens(code, options.lang, options.theme, {
-          includeExplanation: true,
-        })
-        .flat()
-        .map(renderToken)
-        .join("\n")
-    );
+    if (process.env.DEBUG_SHIKI)
+      console.log(
+        highlighter
+          .codeToThemedTokens(code, options.lang, options.theme, {
+            includeExplanation: true,
+          })
+          .flat()
+          .map(renderToken)
+          .join("\n")
+      );
 
     return codeToHTML(code, options);
   }) as typeof highlighter.codeToHtml;

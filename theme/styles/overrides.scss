@@ -17,3 +17,7 @@
   color: oklch(30% 0.1 200) !important;
   background-color: oklch(90% 0.1 200) !important;
 }
+
+* {
+  text-rendering: optimizeLegibility;
+}

@@ -14,8 +14,10 @@
   --color-octane-fg: oklch(var(--lt-fg) var(--chroma-normal) var(--hue-octane));
   --color-octane-accent: oklch(var(--lt-accent) var(--chroma-normal) var(--hue-octane));
   --color-polaris: oklch(var(--lt-bright) var(--chroma-normal) var(--hue-polaris));
-  --color-polaris-accent: oklch(92% 0.20 285.86);
+  --color-polaris-accent: oklch(var(--lt-accent) var(--chroma-normal) var(--hue-polaris));
+  --color-polaris-fg: oklch(var(--lt-fg) var(--chroma-normal) var(--hue-polaris));
   --color-heading-accent: oklch(83% 0.15 285.86);
+
 
   --shiki-color-text: #F8F8F2;
   --shiki-color-background: #282A36;

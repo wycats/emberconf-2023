@@ -1,0 +1,23 @@
+{
+  "name": "@starbeam-docs/fenced-container",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "main": "dist/fenced-container.js",
+  "types": "./src/index.ts",
+  "exports": {
+    "types": "./src/index.ts",
+    "default": "./dist/fenced-container.js"
+  },
+  "scripts": {
+    "build": "vite build"
+  },
+  "dependencies": {
+    "@jsergo/mdit": "workspace:^",
+    "fenceparser": "^2.2.0",
+    "markdown-it": "^13.0.1"
+  },
+  "devDependencies": {
+    "vite": "^4.4.4"
+  }
+}

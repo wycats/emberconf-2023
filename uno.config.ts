@@ -23,6 +23,12 @@ export default defineConfig({
         "line-height": `var(--s-${c}) !important`,
       }),
     ],
+    [
+      /^grid-area-(.*)$/,
+      ([, c]) => ({
+        "grid-area": c,
+      }),
+    ],
   ],
   theme: {
     colors: {

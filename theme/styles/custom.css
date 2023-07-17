@@ -13,6 +13,17 @@ blockquote.emphasize {
   --current-hue: var(--hue-polaris);
   background-color: var(--color-accent) !important;
   color: var(--color-fg) !important;
+
+  &:not(.header)[content] {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    align-items: first baseline;
+    column-gap: var(--s-down3);
+
+    &::before {
+      content: attr(content);
+    }
+  }
 }
 
 blockquote.header {

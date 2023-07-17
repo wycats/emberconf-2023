@@ -1,0 +1,29 @@
+{
+  "name": "@jsergo/mdit",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "A more ergonomic way to create MarkdownIt plugins",
+  "source": "index.ts",
+  "main": "./dist/mdit.js",
+  "types": "./src/index.ts",
+  "exports": {
+    "types": "./src/index.ts",
+    "default": "./dist/mdit.js"
+  },
+  "scripts": {
+    "build": "vite build"
+  },
+  "publishConfig": {
+    "main": "./dist/index.cjs",
+    "module": "./dist/index.esm.js",
+    "exports": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.cjs",
+      "default": "./dist/index.modern.mjs"
+    }
+  },
+  "devDependencies": {
+    "markdown-it": "^13.0.1",
+    "vite": "^4.4.4"
+  }
+}

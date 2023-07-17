@@ -25,25 +25,6 @@ layout: intro
 
 What is Polaris? And why does it matter?
 
-<div class="pt-12">
-  <span @click="$slidev.nav.next" class="px-2 py-1 rounded cursor-pointer" hover="bg-white bg-opacity-10">
-    Press Space for next page <carbon:arrow-right class="inline"/>
-  </span>
-</div>
-
-<div class="abs-br m-6 flex gap-2">
-  <button @click="$slidev.nav.openInEditor()" title="Open in Editor" class="text-xl slidev-icon-btn opacity-50 !border-none !hover:text-white">
-    <carbon:edit />
-  </button>
-  <a href="https://github.com/slidevjs/slidev" target="_blank" alt="GitHub"
-    class="text-xl slidev-icon-btn opacity-50 !border-none !hover:text-white">
-    <carbon-logo-github />
-  </a>
-</div>
-
-<!--
-The last comment block of each slide will be treated as slide notes. It will be visible and editable in Presenter Mode along with the slide. [Read more in the docs](https://sli.dev/guide/syntax.html#notes)
--->
 
 ---
 transition: fade-out
@@ -80,7 +61,7 @@ layout: intro
 2. Routing
 3. TypeScript
 4. Modern Tooling By Default
-    - vite out of the box 
+    - vite out of the box
     - vite plugins, optimized builds, etc. etc.
     - [**strong emphasis on zero-config shared tooling**]{.text-red}
 {.fs-up3 .text-purple}
@@ -222,6 +203,7 @@ function uppercase(string: string) {
 
 </TheConsole>
 
+
 ---
 layout: text-code
 prose: small
@@ -242,7 +224,6 @@ And no need to wrap it in
 `helper()` either. {v-click}
 
 ::b::
-
 
 <TheConsole title="utils/uppercase.ts">
 
@@ -727,6 +708,191 @@ layout: intro
 ## A route's model is a Resource scoped to its route. {.polaris}
 
 ---
+layout: two-cols
+---
+
+# An Async Resource
+
+::a::
+
+#### What you'll probably write for simple fetches.
+
+<the-console title="app/routes/articles.ts">
+
+```ts
+import { RemoteData } from "#app/utils/remote-data";
+
+export default () => RemoteData("/articles.json");
+```
+
+</the-console>
+
+
+You don't *have* to support cancellation, but it's probably a good idea. {v-click}
+
+::b::
+
+#### How you'd write `RemoteData` by hand.
+
+<the-console title="app/utils/remote-data.ts">
+
+```ts
+import { Resource, Cell } from "@starbeam/universal";
+
+export default () => Resource(({ on }) => {
+  const data = Cell({ status: "loading" });
+
+  on.setup(() => {
+    const controller = new AbortController();
+
+    fetch(url.current, { signal: controller.signal })
+      .then((response) => response.json())
+      .then((json) => data.set({ status: "ok", data: json }));
+      .catch((error) => data.set({ status: "error", error }));
+
+    return () => controller.abort();
+  });
+
+  return data;
+});
+```
+
+</the-console>
+
+---
+layout: intro
+---
+
+## Dynamic Segments Are Parameters.
+
+<TheConsole title="app/routes/articles.ts" code="large">
+
+```ts
+import { RemoteData } from "#app/utils/remote-data";
+
+export default (id: string) => 
+  RemoteData(`/articles/${id}.json`);
+```
+
+</TheConsole>
+
+
+---
+layout: text-code
+class: not-prose fs-base
+columns: 1fr 2fr
+---
+
+# Routing Map
+
+::a::
+
+Routes are the main unit of **code splitting** in Polaris.
+
+> The mapping from `articles/:id` to the function in `articles.data.ts` 
+> is fully type-safe. {v-click .emphasize .p-2 .fs-down1 .lh-up1 content="💡"}
+
+::b::
+
+<the-console title="app/routes/index.ts" code="medium-lg">
+
+```ts
+import { map, to } from "@ember/routing";
+
+map(import.meta, [
+  to("articles"),
+  to("article", { path: "articles/:id" }],
+]);
+```
+
+</the-console>
+
+<the-console title="app/routes/articles.data.ts" code="medium-lg">
+
+```ts
+import { RemoteData } from "#app/utils/remote-data";
+
+export default (id: string) => 
+  ({ articles: RemoteData(`/articles/${id}.json`) });
+```
+
+</the-console>
+
+<style>
+p code {
+  background-color: var(--color-polaris);
+  color: var(--color-polaris-fg);
+}
+</style>
+
+---
+layout: text-code
+---
+
+# Routes
+
+::a::
+
+A route's component and its code load in parallel.
+
+> This happens across a tree of routes, avoiding waterfalls.
+> {.emphasize .fs-base .lh-up2 .p-3 .not-prose}
+
+<video src="/waterfalls.mp4" autoplay loop v-click></video>
+
+
+
+::b::
+
+~~~md console title="app/routes/articles.data.ts" code=medium
+```ts
+import { RemoteData } from "#app/utils/remote-data";
+
+export default (id: string) => 
+  ({ articles: RemoteData(`/articles/${id}.json`) });
+```
+~~~
+
+~~~md console title="app/routes/articles.gts" code="medium-lg"
+```ts
+import Article from "#app/components/article";
+
+<template>
+  {{#each @articles as |article|}}
+    <Article @article={{article}} />
+  {{/each}}
+</template>
+```
+~~~
+
+---
+layout: two-cols
+---
+
+::a::
+
+::b::
+
+~~~md console title="app/routes/index.gts"
+```ts
+import { map, to } from "@ember/routing";
+
+map(import.meta, [
+  to("articles"),
+  to("article", { path: "articles/:id" }],
+]);
+```
+~~~
+
+
+<style>
+p code {
+  background-color: var(--color-polaris);
+  color: var(--color-polaris-fg);
+}
+</style>
+
+---
 layout: section
 ---
 
@@ -761,3 +927,56 @@ layout: section
 > {.emphasize .header .p-1}
 
 ---
+layout: intro
+---
+
+
+---
+layout: two-cols
+code: large
+---
+
+# CSS {.mb-0}
+
+
+::a::
+
+## Bringing it All Together 
+
+~~~md console title="counter.gjs" code=medium
+```ts {all|1}
+<template>
+  <div>{{yield}}</div>
+
+  <style>
+    div {
+      border: 1px solid var(--theme-color);
+    }
+  </style>
+</template>
+```
+~~~
+
+::b::
+
+#### Generated CSS
+
+~~~md console title="counter.css"
+```css
+div[data-v-7ba5bd90] {
+  border: 1px solid var(--theme-color);
+}
+```
+~~~
+
+#### ~ Generated JS
+
+~~~md console title="counter.gjs"
+```ts
+import "./counter.css";
+
+<template>
+  <div data-v-7ba5bd90>{{ yield }}</div>
+</template>;
+```
+~~~

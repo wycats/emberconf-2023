@@ -1,0 +1,13 @@
+@mixin not($shorthand) {
+  &:not([class*=" #{$shorthand}-"]):not([class^="#{$shorthand}-"]):not([class*=" #{$shorthand}x-"]):not([class*=" #{$shorthand}y-"]):not([class^="#{$shorthand}x-"]):not([class^="#{$shorthand}y-"]):not([class*=" #{$shorthand}t-"]):not([class^="#{$shorthand}t-"]):not([class*=" #{$shorthand}b-"]):not([class^="#{$shorthand}b-"]):not([class*=" #{$shorthand}l-"]):not([class^="#{$shorthand}l-"]):not([class*=" #{$shorthand}r-"]):not([class^="#{$shorthand}r-"]) {
+    @content;
+  }
+}
+
+@mixin not-class-starts($start...) {
+  @for $i from 0 to length($start) {
+    &:not([class*=" #{nth($start, $i + 1)}"]):not([class^="#{nth($start, $i + 1)}"]) {
+      @content;
+    }
+  }
+}
