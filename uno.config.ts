@@ -29,6 +29,7 @@ export default defineConfig({
         "grid-area": c,
       }),
     ],
+    [/^grid-column=(.*)$/, ([, c]) => parseColumn(c)],
   ],
   theme: {
     colors: {
@@ -50,3 +51,30 @@ export default defineConfig({
 
   transformers: [transformerDirectives(), transformerVariantGroup()],
 });
+
+function parseColumn(column: string) {
+  const syntax = /^(?<start>\d+)(?:(?<range>..)?(?<inclusive>=?)(?<end>\d+))$/u;
+  const groups = syntax.exec(column)?.groups as
+    | {
+        start: string;
+        range?: string | undefined;
+        inclusive?: string | undefined;
+        end?: string | undefined;
+      }
+    | undefined;
+
+  console.log(groups);
+
+  if (!groups) return undefined;
+
+  const { start, range, inclusive, end } = groups;
+
+  if (!range) {
+    return { "grid-column": start };
+  }
+
+  const endInt = parseInt(end!);
+  const endCol = inclusive === "=" ? endInt + 1 : endInt;
+
+  return { "grid-column": `${start} / ${endCol}` };
+}

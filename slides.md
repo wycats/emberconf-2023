@@ -21,7 +21,42 @@ layout: intro
 
 # EmberConf 2023
 
+---
+layout: text-image
+media: /yehuda-2006.jpg
+caption: Baby Yehuda in 2006
+---
+
+# I started programming in 2004
+
+::text::
+
+#### Ruby and Rails changed my life.
+
+- Empowering everyone
+- No easy-bake ovens
+
+<style lang="scss">
+ul {
+  @apply px-0;
+}
+
+ul li {
+  @apply list-none;
+
+  &::before {
+    content: "🌟 "
+  }
+}
+</style>
+
+---
+layout: intro
+---
+
 ## Polaris is Coming
+
+### Making Ember Healthy Again
 
 What is Polaris? And why does it matter?
 
@@ -765,17 +800,14 @@ layout: intro
 
 ## Dynamic Segments Are Parameters.
 
-<TheConsole title="app/routes/articles.ts" code="large">
-
+~~~md console title="app/routes/articles.data.ts" code=large
 ```ts
 import { RemoteData } from "#app/utils/remote-data";
 
 export default (id: string) => 
   RemoteData(`/articles/${id}.json`);
 ```
-
-</TheConsole>
-
+~~~
 
 ---
 layout: text-code
